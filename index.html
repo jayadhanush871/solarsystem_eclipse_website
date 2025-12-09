@@ -153,9 +153,10 @@
 
     <h2>Image Gallery</h2>
     <div class="gallery">
-        <img src="planet1.jpg">
-        <img src="planet2.jpg">
-        <img src="planet3.jpg">
+        <img src="mercury.jpg">
+        <img src="mars.jpg">
+        <img src="jupiter.jpg">
+        <img src="earth.jpg">
     </div>
 </main>
 
@@ -279,7 +280,7 @@ function toggleRegPass(){
 }
 
 /*** SLIDESHOW ***/
-var slides=["planet1.jpg","planet2.jpg","planet3.jpg"];
+var slides=["neptune.jpg","saturn.jpg","uranus.jpg","venus.jpg"];
 var index=0;
 function nextSlide(){ index=(index+1)%slides.length; document.getElementById("slideImg").src=slides[index]; }
 function prevSlide(){ index=(index-1+slides.length)%slides.length; document.getElementById("slideImg").src=slides[index]; }
