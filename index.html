@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SolarLearn – Interactive Website</title>
+
+    <style>
+        body { font-family: Arial; margin:0; color:black; }
+        header { padding:15px; border-bottom:1px solid #ccc; }
+        nav a { margin:0 12px; cursor:pointer; text-decoration:none; color:black; font-size:17px; }
+        main { width:85%; margin:20px auto; border:1px solid #ccc; border-radius:8px; padding:20px; }
+        .btn { border:1px solid black; padding:6px 12px; border-radius:4px; cursor:pointer; background:none; }
+
+        #slideshow img {
+            width:350px;
+            height:240px;
+            display:block;
+            margin:auto;
+            border:1px solid black;
+            border-radius:8px;
+        }
+
+        .gallery img {
+            width:200px; height:140px; margin:8px;
+            border:1px solid black; border-radius:6px;
+        }
+
+        form input, form textarea {
+            width:100%; padding:10px; margin-bottom:15px;
+            border-radius:4px; border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LANDING PAGE -->
+<main id="landing">
+    <h1>SolarLearn Academy</h1>
+    <p>Learn the Solar System and Eclipses interactively.</p>
+
+    <button class="btn" onclick="showPage('login')">Login</button>
+    <button class="btn" onclick="showPage('registration')">Register</button>
+</main>
+
+<!-- LOGIN PAGE -->
+<main id="login" style="display:none;">
+    <h1>Login</h1>
+    <form onsubmit="loginUser(event)">
+        <input type="text" id="unameLogin" placeholder="Username" required>
+
+        <div>
+            <input type="password" id="pwdLogin" placeholder="Password" required>
+            <button type="button" class="btn" onclick="toggleLoginPass()">Show/Hide</button>
+        </div>
+
+        <button class="btn">Login</button>
+    </form>
+
+    <button class="btn" onclick="forgotPassword()">Forgot Password?</button>
+</main>
+
+<!-- REGISTRATION PAGE -->
+<main id="registration" style="display:none;">
+    <h1>Registration</h1>
+
+    <form onsubmit="startRegistration(event)">
+        <input type="email" id="regEmail" placeholder="Email" required>
+        <input type="text" id="regUser" placeholder="Create Username" required>
+
+        <div>
+            <input type="password" id="regPass" placeholder="Create Password" required>
+            <button class="btn" type="button" onclick="toggleRegPass()">Show/Hide</button>
+        </div>
+
+        <button class="btn">Register</button>
+    </form>
+</main>
+
+<!-- OTP PAGE -->
+<main id="otpSection" style="display:none;">
+    <h1>Email OTP Verification</h1>
+    <p><b>Your OTP:</b> <span id="displayOTP"></span></p>
+
+    <input type="text" id="userOTP" placeholder="Enter OTP" required>
+    <button class="btn" onclick="verifyOTP()">Verify OTP</button>
+</main>
+
+<!-- NAVBAR -->
+<header id="topnav" style="display:none;">
+    <nav>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('course')">Learning</a>
+        <a onclick="showPage('assessment')">Assessment</a>
+        <a onclick="showPage('feedback')">Feedback</a>
+        <a onclick="logoutUser()">Logout</a>
+    </nav>
+</header>
+
+<!-- HOME PAGE -->
+<main id="home" style="display:none;">
+    <h1>Solar System & Eclipses</h1>
+
+    <h2>The Solar System</h2>
+    <p>
+        The Solar System contains the Sun, planets, moons, asteroids, comets, and dwarf planets.
+        The Sun provides heat and energy to all planets and controls their motion using gravity.
+    </p>
+
+    <h2>Eclipses</h2>
+    <p>
+        Eclipses occur when a celestial body moves into the shadow of another.
+        Solar eclipses occur during New Moon, while lunar eclipses occur during Full Moon.
+    </p>
+</main>
+
+<!-- LEARNING PAGE -->
+<main id="course" style="display:none;">
+    <h2>Planet Slideshow</h2>
+    <div id="slideshow">
+        <img id="slideImg" src="planet1.jpg">
+        <br>
+        <button class="btn" onclick="prevSlide()">Previous</button>
+        <button class="btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <br><h2>Learn by Topic</h2>
+    <select class="btn" onchange="showDropdown(this.value)">
+        <option value="">Select Topic</option>
+        <option value="planets">Planets</option>
+        <option value="solar">Solar Eclipse</option>
+        <option value="lunar">Lunar Eclipse</option>
+        <option value="galaxies">Galaxies</option>
+        <option value="asteroids">Asteroids</option>
+        <option value="comets">Comets</option>
+        <option value="missions">Space Missions</option>
+        <option value="blackholes">Black Holes</option>
+    </select>
+
+    <div id="contentArea"><p>Select a topic.</p></div>
+
+    <h2>Audio Explanation</h2>
+
+    <button class="btn" onclick="playAudio('audio1')">Play Solar Audio</button>
+    <button class="btn" onclick="stopAudio('audio1')">Stop Solar Audio</button>
+
+    <br><br>
+
+    <button class="btn" onclick="playAudio('audio2')">Play Eclipse Audio</button>
+    <button class="btn" onclick="stopAudio('audio2')">Stop Eclipse Audio</button>
+
+    <audio id="audio1" src="solar.mp3"></audio>
+    <audio id="audio2" src="eclipse.mp3"></audio>
+
+    <h2>Image Gallery</h2>
+    <div class="gallery">
+        <img src="planet1.jpg">
+        <img src="planet2.jpg">
+        <img src="planet3.jpg">
+    </div>
+</main>
+
+<!-- QUIZ PAGE -->
+<main id="assessment" style="display:none;">
+    <h1>Solar System & Eclipse Quiz</h1>
+
+    <form onsubmit="evaluateQuiz(event)">
+
+        <p><b>1. Center of our Solar System is:</b></p>
+        <input type="radio" name="q1" value="sun"> Sun
+        <input type="radio" name="q1" value="moon"> Moon
+
+        <p><b>2. Solar eclipse happens when:</b></p>
+        <input type="radio" name="q2" value="moon"> Moon blocks sunlight
+        <input type="radio" name="q2" value="earth"> Earth blocks sunlight
+
+        <p><b>3. Lunar eclipse happens when:</b></p>
+        <input type="radio" name="q3" value="earth"> Earth’s shadow covers the Moon
+        <input type="radio" name="q3" value="sun"> Sun casts shadow on Earth
+
+        <p><b>4. Largest planet in Solar System is:</b></p>
+        <input type="radio" name="q4" value="jupiter"> Jupiter
+        <input type="radio" name="q4" value="mars"> Mars
+
+        <p><b>5. The galaxy we live in is called:</b></p>
+        <input type="radio" name="q5" value="milkyway"> Milky Way
+        <input type="radio" name="q5" value="andromeda"> Andromeda
+
+        <p><b>6. Asteroids mostly exist between:</b></p>
+        <input type="radio" name="q6" value="mj"> Mars and Jupiter
+        <input type="radio" name="q6" value="ev"> Earth and Venus
+
+        <p><b>7. A comet has:</b></p>
+        <input type="radio" name="q7" value="tail"> A glowing tail near Sun
+        <input type="radio" name="q7" value="none"> No tail
+
+        <br><br>
+        <button class="btn">Submit Quiz</button>
+    </form>
+
+    <h2 id="quizResult"></h2>
+</main>
+
+<!-- FEEDBACK PAGE -->
+<main id="feedback" style="display:none;">
+    <h1>Feedback & Contact</h1>
+    <form onsubmit="submitFeedback(event)">
+        <input id="fbName" placeholder="Your Name" required>
+        <textarea id="fbMessage" placeholder="Your Feedback" required></textarea>
+        <button class="btn">Send</button>
+    </form>
+</main>
+
+<script>
+/*** PAGE SHOW + STOP AUDIO ***/
+function showPage(id){
+    document.querySelectorAll("audio").forEach(a=>{
+        a.pause();
+        a.currentTime=0;
+    });
+    document.querySelectorAll("main,header").forEach(x=>x.style.display="none");
+    if(["home","course","assessment","feedback"].includes(id))
+        document.getElementById("topnav").style.display="block";
+    document.getElementById(id).style.display="block";
+}
+
+/*** REGISTRATION & OTP ***/
+let systemOTP="";
+function startRegistration(e){
+    e.preventDefault();
+    localStorage.setItem("TEMP_Email", document.getElementById("regEmail").value);
+    localStorage.setItem("TEMP_User", document.getElementById("regUser").value);
+    localStorage.setItem("TEMP_Pass", document.getElementById("regPass").value);
+    systemOTP = Math.floor(100000 + Math.random()*900000);
+    document.getElementById("displayOTP").innerText = systemOTP;
+    showPageSection("otpSection");
+}
+
+function verifyOTP(){
+    if(document.getElementById("userOTP").value == systemOTP){
+        localStorage.setItem("SolarEmail", localStorage.getItem("TEMP_Email"));
+        localStorage.setItem("SolarUser", localStorage.getItem("TEMP_User"));
+        localStorage.setItem("SolarPass", localStorage.getItem("TEMP_Pass"));
+        alert("OTP Verified — Registration Successful!");
+        showPage("login");
+    }
+    else alert("Incorrect OTP!");
+}
+
+function showPageSection(id){
+    document.querySelectorAll("main").forEach(x=>x.style.display="none");
+    document.getElementById(id).style.display="block";
+}
+
+/*** LOGIN ***/
+function loginUser(e){
+    e.preventDefault();
+    if(
+        document.getElementById("unameLogin").value===localStorage.getItem("SolarUser") &&
+        document.getElementById("pwdLogin").value===localStorage.getItem("SolarPass")
+    ){ showPage("home"); }
+    else alert("Invalid Login!");
+}
+
+function forgotPassword(){
+    alert("Username: "+localStorage.getItem("SolarUser")+
+          "\nPassword: "+localStorage.getItem("SolarPass"));
+}
+
+function logoutUser(){ showPage("landing"); }
+
+/*** PASSWORD TOGGLE ***/
+function toggleLoginPass(){
+    let p=document.getElementById("pwdLogin");
+    p.type=p.type==="password"?"text":"password";
+}
+function toggleRegPass(){
+    let p=document.getElementById("regPass");
+    p.type=p.type==="password"?"text":"password";
+}
+
+/*** SLIDESHOW ***/
+var slides=["planet1.jpg","planet2.jpg","planet3.jpg"];
+var index=0;
+function nextSlide(){ index=(index+1)%slides.length; document.getElementById("slideImg").src=slides[index]; }
+function prevSlide(){ index=(index-1+slides.length)%slides.length; document.getElementById("slideImg").src=slides[index]; }
+setInterval(nextSlide,5000);
+
+/*** TOPIC LEARNING — unchanged ***/
+function showDropdown(topic){
+    let area=document.getElementById("contentArea");
+    let text="";
+    if(topic==="planets"){ text=`<h3>Planets</h3>Planets revolve around the Sun.`; }
+    if(topic==="solar"){ text=`<h3>Solar Eclipse</h3>Moon blocks sunlight.`; }
+    if(topic==="lunar"){ text=`<h3>Lunar Eclipse</h3>Earth’s shadow covers Moon.`; }
+    if(topic==="galaxies"){ text=`<h3>Galaxies</h3>We live in Milky Way.`; }
+    if(topic==="asteroids"){ text=`<h3>Asteroids</h3>Rocky objects.`; }
+    if(topic==="comets"){ text=`<h3>Comets</h3>Icy bodies with tail.`; }
+    if(topic==="missions"){ text=`<h3>Space Missions</h3>Exploration.`; }
+    if(topic==="blackholes"){ text=`<h3>Black Holes</h3>Super gravity.`; }
+    if(topic==="") text=`<p>Select a topic.</p>`;
+    area.innerHTML=text;
+}
+
+/*** AUDIO ***/
+function playAudio(id){ document.getElementById(id).play(); }
+function stopAudio(id){
+    let a=document.getElementById(id);
+    a.pause(); a.currentTime=0;
+}
+
+/*** QUIZ — SHOW ANSWERS ***/
+function evaluateQuiz(e){
+    e.preventDefault();
+    let score=0;
+    let result="<h3>Quiz Results:</h3>";
+
+    function check(q,correct,explain){
+        let ans=document.querySelector('input[name="'+q+'"]:checked')?.value;
+        if(ans===correct){ score++; result+=`✔ Correct — ${explain}<br>`; }
+        else result+=`✘ Wrong — ${explain}<br>`;
+    }
+
+    check("q1","sun","Sun is the center of Solar System");
+    check("q2","moon","Moon blocks sunlight in Solar Eclipse");
+    check("q3","earth","Earth’s shadow covers Moon in Lunar Eclipse");
+    check("q4","jupiter","Jupiter is largest planet");
+    check("q5","milkyway","We live in Milky Way Galaxy");
+    check("q6","mj","Asteroids lie between Mars & Jupiter");
+    check("q7","tail","Comets have glowing tail near Sun");
+
+    result+=`<br><b>Total Score = ${score}/7</b>`;
+    document.getElementById("quizResult").innerHTML=result;
+}
+
+/*** FEEDBACK ***/
+function submitFeedback(e){
+    e.preventDefault();
+    alert("Thank you for your feedback!");
+}
+</script>
+
+</body>
+</html>
